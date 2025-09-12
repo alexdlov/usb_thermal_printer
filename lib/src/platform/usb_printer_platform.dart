@@ -122,21 +122,19 @@ class MethodChannelUsbPrinter extends UsbPrinterPlatform {
   @override
   Future<PrintResult> print(List<int> data) async {
     try {
-      final Map<String, dynamic> result =
-          Map<String, dynamic>.from(await _methodChannel.invokeMethod('print', {
+      final bool result = await _methodChannel.invokeMethod('print', {
         'data': data,
-      }));
+      });
 
-      final type = result['type'] as String;
-      if (type == 'success') {
+      if (result) {
         return PrintSuccess(
-          bytesSent: result['bytesSent'] as int,
-          duration: Duration(milliseconds: result['duration'] as int),
+          bytesSent: data.length,
+          duration: Duration(milliseconds: 100), // Estimate
         );
       } else {
         return PrintFailure(
-          error: result['error'] as String,
-          message: result['message'] as String?,
+          error: 'print_failed',
+          message: 'Failed to send data to printer',
         );
       }
     } catch (e) {
@@ -163,9 +161,14 @@ class MethodChannelUsbPrinter extends UsbPrinterPlatform {
       onListen: () {
         _eventChannel.receiveBroadcastStream().listen(
           (dynamic event) {
-            if (event is int) {
-              final state = _connectionStateFromInt(event);
-              _stateController?.add(state);
+            if (event is Map) {
+              final connected = event['connected'] as bool?;
+              if (connected != null) {
+                final state = connected
+                    ? PrinterState.connected
+                    : PrinterState.disconnected;
+                _stateController?.add(state);
+              }
             }
           },
           onError: (dynamic error) {
@@ -184,22 +187,6 @@ class MethodChannelUsbPrinter extends UsbPrinterPlatform {
   Stream<PrinterError> get errorStream {
     _errorController ??= StreamController<PrinterError>.broadcast();
     return _errorController!.stream;
-  }
-
-  /// Convert connection state integer to PrinterState enum
-  PrinterState _connectionStateFromInt(int value) {
-    switch (value) {
-      case 0:
-        return PrinterState.disconnected;
-      case 1:
-        return PrinterState.connecting;
-      case 2:
-        return PrinterState.connected;
-      case 3:
-        return PrinterState.disconnecting;
-      default:
-        return PrinterState.error;
-    }
   }
 
   /// Dispose resources

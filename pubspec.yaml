@@ -30,4 +30,3 @@ flutter:
       android:
         package: com.example.usb_thermal_printer
         pluginClass: UsbThermalPrinterPlugin
-        pluginSourceDir: android/app/src/main/kotlin/com/example/usb_thermal_printer
