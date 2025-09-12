@@ -81,12 +81,10 @@ class _PrinterDemoState extends State<PrinterDemo> {
             .doubleDivider()
             .item('Cappuccino (L)', price: 4.50)
             .item('Croissant', price: 3.25, qty: 2)
-            .item('Orange Juice', price: 3.00)
             .divider()
-            .row(['Subtotal:', '\$13.00'], widths: [8, 4])
-            .row(['Tax (10%):', '\$1.30'], widths: [8, 4])
+            .row(['Subtotal:', '\$10.00'], widths: [8, 4])
             .doubleDivider()
-            .total('TOTAL:', 14.30)
+            .total('TOTAL:', 10.00)
             .feed(2)
             .text('Payment: VISA ****1234',
                 styles: PosStyles(align: PosAlign.center))
@@ -95,8 +93,6 @@ class _PrinterDemoState extends State<PrinterDemo> {
             .feed(1)
             .text('Thank you for your visit!',
                 styles: PosStyles(align: PosAlign.center, bold: true))
-            .text('Please come again',
-                styles: PosStyles(align: PosAlign.center))
             .feed(3)
             .cut();
       });

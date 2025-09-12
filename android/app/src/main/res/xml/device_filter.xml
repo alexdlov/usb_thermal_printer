@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common thermal printer vendors -->
+    
+    <!-- Epson printers -->
+    <usb-device vendor-id="1208" />
+    
+    <!-- Star Micronics printers -->
+    <usb-device vendor-id="1305" />
+    
+    <!-- Citizen printers -->
+    <usb-device vendor-id="1256" />
+    
+    <!-- Bixolon printers -->
+    <usb-device vendor-id="8637" />
+    
+    <!-- Generic USB printers class -->
+    <usb-device class="7" />
+    
+    <!-- Allow any USB device (for testing) -->
+    <!-- Remove this in production and use specific vendor-id -->
+    <usb-device />
+</resources>
