@@ -1,0 +1,32 @@
+name: usb_thermal_printer
+description: A comprehensive Flutter plugin for USB thermal printers with built-in ESC/POS support. Print receipts, text, images, QR codes and barcodes with reactive streams and fluent API.
+version: 1.0.0
+homepage: https://github.com/yourusername/usb_thermal_printer
+repository: https://github.com/yourusername/usb_thermal_printer
+issue_tracker: https://github.com/yourusername/usb_thermal_printer/issues
+documentation: https://pub.dev/packages/usb_thermal_printer
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  meta: any
+  plugin_platform_interface: ^2.1.6
+  esc_pos_utils_plus: ^2.0.4
+  image: ^4.0.17
+  rxdart: ^0.27.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.example.usb_thermal_printer
+        pluginClass: UsbThermalPrinterPlugin
