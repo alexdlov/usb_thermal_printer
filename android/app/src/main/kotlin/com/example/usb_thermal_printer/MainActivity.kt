@@ -8,6 +8,6 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
         
         // Регистрация вашего плагина
-        flutterEngine.plugins.add(UsbThermalPrinterPlagin())
+        flutterEngine.plugins.add(UsbThermalPrinterPlugin())
     }
 }

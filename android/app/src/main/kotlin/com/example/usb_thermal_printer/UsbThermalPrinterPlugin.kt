@@ -14,7 +14,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-class UsbThermalPrinterPlagin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
+class UsbThermalPrinterPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
     private lateinit var context: Context
     private lateinit var methodChannel: MethodChannel
     private lateinit var eventChannel: EventChannel
