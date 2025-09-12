@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart' as esc;
 import 'package:image/image.dart' as img;
-import 'package:usb_thermal_printer/src/platform/usb_printer_platform.dart';
 import 'package:usb_thermal_printer/usb_thermal_printer.dart';
 
 /// USB Thermal Printer controller

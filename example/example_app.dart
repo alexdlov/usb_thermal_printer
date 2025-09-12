@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:usb_thermal_printer/src/usb_printer.dart';
 import 'package:usb_thermal_printer/usb_thermal_printer.dart';
 
 void main() {
