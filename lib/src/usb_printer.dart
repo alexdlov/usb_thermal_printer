@@ -143,16 +143,7 @@ class UsbPrinter {
     _stateSubject.add(PrinterState.connecting);
 
     try {
-      // Check and request permission
-      if (!await _platform.hasPermission(device)) {
-        final granted = await _platform.requestPermission(device);
-        if (!granted) {
-          throw PrinterException(
-              'Permission denied for device ${device.productName}');
-        }
-      }
-
-      // Connect with config
+      // Connect - platform will handle permission request if needed
       final connected = await _platform.connect(
         device,
         config ?? _config,

@@ -152,16 +152,21 @@ class UsbThermalPrinterPlugin : FlutterPlugin, MethodCallHandler, EventChannel.S
             val connected = connectToDevice(device)
             result.success(connected)
         } else {
-            // Request permission first and connect when granted
+            // Store pending connection for when permission is granted
             pendingConnectResult = result
             pendingConnectDevice = device
-            requestPermission(vendorId, productId, object : Result {
-                override fun success(data: Any?) {
-                    // This will be handled by the broadcast receiver
+            
+            val permissionIntent = PendingIntent.getBroadcast(
+                context, 
+                0, 
+                Intent(ACTION_USB_PERMISSION), 
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                } else {
+                    PendingIntent.FLAG_UPDATE_CURRENT
                 }
-                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {}
-                override fun notImplemented() {}
-            })
+            )
+            usbManager?.requestPermission(device, permissionIntent)
         }
     }
     
@@ -246,18 +251,20 @@ class UsbThermalPrinterPlugin : FlutterPlugin, MethodCallHandler, EventChannel.S
                 val device: UsbDevice? = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
                 val granted = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)
                 
-                // Handle permission result
-                pendingPermissionResult?.success(granted)
-                pendingPermissionResult = null
+                // Handle permission-only result (when requestPermission was called directly)
+                if (pendingPermissionResult != null && pendingConnectResult == null) {
+                    pendingPermissionResult?.success(granted)
+                    pendingPermissionResult = null
+                }
                 
-                // Handle auto-connect if permission was granted
-                if (granted && device != null && pendingConnectResult != null) {
-                    val connected = connectToDevice(device)
-                    pendingConnectResult?.success(connected)
-                    pendingConnectResult = null
-                    pendingConnectDevice = null
-                } else if (pendingConnectResult != null) {
-                    pendingConnectResult?.success(false)
+                // Handle auto-connect after permission request from connectToPrinter
+                if (pendingConnectResult != null) {
+                    if (granted && device != null) {
+                        val connected = connectToDevice(device)
+                        pendingConnectResult?.success(connected)
+                    } else {
+                        pendingConnectResult?.success(false)
+                    }
                     pendingConnectResult = null
                     pendingConnectDevice = null
                 }
